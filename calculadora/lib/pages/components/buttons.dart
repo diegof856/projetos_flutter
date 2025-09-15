@@ -16,7 +16,8 @@ class _ButtonsState extends State<Buttons> {
       LineButton(),
         LineButton(),
         LineButton(),
-        LineButton()
+        LineButton(),
+         LineButton()
 
       ],
     );

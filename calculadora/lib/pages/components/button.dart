@@ -15,7 +15,7 @@ class _ButtonState extends State<Button> implements ButtonLyrics{
         onPressed: uploadLyrics,
         style: TextButton.styleFrom(
           backgroundColor: Color(0xFF2D2A37),
-          fixedSize: const Size(100, 100),
+          fixedSize: const Size(64, 64),
           shape: CircleBorder(
             side: BorderSide(color: Colors.white)
           )

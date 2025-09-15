@@ -10,7 +10,9 @@ class LineButton extends StatefulWidget {
 class _LineButtonState extends State<LineButton> {
   @override
   Widget build(BuildContext context) {
-    return  Row(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
@@ -23,7 +25,9 @@ class _LineButtonState extends State<LineButton> {
         ), Expanded(
             child: Button()
         ),
+        
       ],
+    )
     );
   }
 }
