@@ -28,6 +28,7 @@ class _Inputs extends State<Inputs> {
             ),
             textAlign: TextAlign.right,
           ),
+          const SizedBox(height: 15),
           TextField(
             style: TextStyle(color: CoresCustomizadas.corInput, fontSize: 32),
             controller: widget.controller,

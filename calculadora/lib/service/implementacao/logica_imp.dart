@@ -27,7 +27,7 @@ class CalculoInterno implements Calculo {
   }
 
   double _calculate(String expr) {
-    expr = expr.replaceAll(',', '.');
+  
     List<String> operadores = [];
     List<double> valores = [];
     //expressão regular
@@ -45,7 +45,14 @@ class CalculoInterno implements Calculo {
     }
     valores = expr.split(opRegex).map((e) => double.parse(e.trim())).toList();
 
-    for (int i = 0; i < operadores.length; i++) {
+    multiplicacaoDivisao(operadores, valores);
+    
+    
+    return somaSubtracao(operadores, valores);
+  }
+
+  void multiplicacaoDivisao(List<String> operadores, List<double> valores){
+        for (int i = 0; i < operadores.length; i++) {
       if (operadores[i] == '*' ||
           operadores[i] == '/' ||
           operadores[i] == '%') {
@@ -65,8 +72,9 @@ class CalculoInterno implements Calculo {
         i--;
       }
     }
+  }
+  double somaSubtracao(List<String> operadores, List<double> valores){
     double resultado = valores[0];
-
     for (int i = 0; i < operadores.length; i++) {
       if (operadores[i] == '+') {
         resultado += valores[i + 1];

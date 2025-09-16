@@ -25,6 +25,8 @@ class _TodoCalcState extends State<TodoCalc> {
               controller:_controller,
               expressao:expressao)
           ),
+          const SizedBox(height: 25)
+          ,
           Expanded(
               flex: 8,
               child: Buttons(
