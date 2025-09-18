@@ -6,7 +6,7 @@ class BoardGrid extends StatelessWidget {
   final bool oTurn;
   final List<List<String>> displayXO;
   final List<int> matchedIndexes;
-  final Function(int linha, int coluna, int index) onTapCell;
+  final Function(int linha, int coluna) onTapCell;
   const BoardGrid({
      super.key,
      required this.displayXO,
@@ -24,7 +24,7 @@ class BoardGrid extends StatelessWidget {
           int linha = index ~/ 3;
           int coluna = index % 3;
           return GestureDetector(
-            onTap: () => onTapCell(linha,coluna,index),
+            onTap: () => onTapCell(linha,coluna),
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),

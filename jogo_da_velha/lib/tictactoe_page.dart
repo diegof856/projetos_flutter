@@ -21,7 +21,8 @@ class _TicTacToePageState extends State<TictactoePage> {
     ['', '', '']
   ];
   List<int> matchedIndexes = [];
-
+  bool condicaoVitoria = false;
+  int tentativas = 0; 
   int oScore = 0;
   int xScore = 0;
 
@@ -32,13 +33,16 @@ class _TicTacToePageState extends State<TictactoePage> {
   Timer? timer;
 
   void startTimer(){
+    stopTimer();
     timer = Timer.periodic(const Duration(seconds: 1), (_) {
       setState(() {
-        if(seconds > 0) {
+        if(seconds > 0 && !condicaoVitoria) {
           seconds--;
-        } else {
+        }else if(condicaoVitoria){
           stopTimer();
-          oTurn = oTurn == true?false:true;
+        }else{
+          stopTimer();
+          oTurn = oTurn?false:true;
           startTimer();
         }
       });
@@ -52,34 +56,37 @@ class _TicTacToePageState extends State<TictactoePage> {
 
   void resetTimer() => seconds = maxSeconds;
 
-  void _marcacao(int linha, int coluna, int index){
-
+  void _marcacao(int linha, int coluna){
+    startTimer();
     if (displayXO[linha][coluna] != '') {
       return; // Posição já preenchida
     }
-    stopTimer();
+    
     setState(() {
       if (oTurn) {
         displayXO[linha][coluna] = "O";
       } else {
         displayXO[linha][coluna] = "X";
       }
-
+      tentativas++;
       oTurn = !oTurn;
-      if(!_checarVitoria()){
-        _verificarEmpate(index);
+      condicaoVitoria = _checarVitoria();
+     
+      if(!condicaoVitoria){
+        _verificarEmpate();
       }
+     
     });
+
   }
-  void _verificarEmpate(int index){
-    if(!matchedIndexes.contains(index)){
-      matchedIndexes.add(index);
-    }
-    if(matchedIndexes.length == 9){
+  void _verificarEmpate(){
+    if(tentativas == 9 && !condicaoVitoria){
       setState(() {
         resultDeclaration = "Empate";
+        matchedIndexes = List.generate(9, (index) => index);
+        condicaoVitoria = true;
       });
-      _resetarTabuleiro();
+      stopTimer();
     }
 
   }
@@ -88,7 +95,7 @@ class _TicTacToePageState extends State<TictactoePage> {
     // Checar linhas(horizontal)
     for (int i = 0; i < 3; i++) {
       if (displayXO[i][0] == displayXO[i][1] && displayXO[i][0] == displayXO[i][2] && displayXO[i][0] != '') {
-        _declararVitoria( displayXO[i][0]);
+        _declararVitoria( displayXO[i][0], [i * 3, i * 3 + 1, i * 3 + 2] );
         return true;
       }
     }
@@ -96,25 +103,26 @@ class _TicTacToePageState extends State<TictactoePage> {
     // Checar colunas (vertical)
     for (int i = 0; i < 3; i++) {
       if (displayXO[0][i] == displayXO[1][i] && displayXO[0][i] == displayXO[2][i] && displayXO[0][i] != '') {
-        _declararVitoria(displayXO[0][i]);
+         _declararVitoria(displayXO[0][i], [i, i + 3, i + 6]);
         return true;
       }
     }
 
     // Checar diagonal (principal)
     if (displayXO[0][0] == displayXO[1][1] && displayXO[0][0] == displayXO[2][2] && displayXO[0][0] != '') {
-      _declararVitoria(displayXO[0][0]);
+        _declararVitoria(displayXO[0][0], [0, 4, 8]);
       return true;
     }
     // Checar diagonal (secundaria)
     if (displayXO[0][2] == displayXO[1][1] && displayXO[0][2] == displayXO[2][0] && displayXO[0][2] != '') {
-      _declararVitoria(displayXO[0][2]);
+        _declararVitoria(displayXO[0][2],  [2, 4, 6]);
       return true;
     }
     return false;
   }
-  void _declararVitoria(String vencedor) {
+  void _declararVitoria(String vencedor, List<int> indices) {
     setState(() {
+      matchedIndexes = indices;
       if (vencedor == 'X') {
         xScore++;
       } else {
@@ -122,9 +130,8 @@ class _TicTacToePageState extends State<TictactoePage> {
       }
       resultDeclaration = "Jogador $vencedor venceu";
     });
-    _resetarTabuleiro();
   }
-  void _resetarTabuleiro() {
+  void resetarTabuleiro() {
     setState(() {
       displayXO = [
         ['', '', ''],
@@ -133,7 +140,10 @@ class _TicTacToePageState extends State<TictactoePage> {
       ];
       matchedIndexes.clear();
       stopTimer();
+      tentativas = 0;         
+      condicaoVitoria = false;
       oTurn = true;
+      resultDeclaration ='';
     });
   }
 
@@ -155,12 +165,13 @@ class _TicTacToePageState extends State<TictactoePage> {
                 displayXO: displayXO,
                 matchedIndexes: matchedIndexes,
                 oTurn: oTurn, onTapCell:
-                (linha,coluna,index){
-                  _marcacao(linha, coluna, index);
-                  startTimer();
+                (linha,coluna){
+                  _marcacao(linha, coluna);
+                  
                 }),
           ),
-          Expanded(flex: 2, child:GameStatus(result: resultDeclaration, oTurn: oTurn, seconds: seconds))
+         
+          Expanded(flex: 2, child:GameStatus(result: resultDeclaration, oTurn: oTurn, seconds: seconds,  tentativas: tentativas, resetarTabuleiro:resetarTabuleiro))
         ],
       ),
       ),
