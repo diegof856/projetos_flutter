@@ -4,6 +4,7 @@ import diegof856.com.github.NasaAPI.commands.CreateUserCommand;
 import diegof856.com.github.NasaAPI.commands.UpdateUserCommand;
 import diegof856.com.github.NasaAPI.factory.UserFactory;
 import diegof856.com.github.NasaAPI.mediator.Mediator;
+import diegof856.com.github.NasaAPI.response.UserNasaApiResponse;
 import diegof856.com.github.NasaAPI.response.UserResponse;
 import diegof856.com.github.NasaAPI.utils.Utils;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-
+import java.util.List;
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -36,5 +38,10 @@ public class UserController {
     @GetMapping("{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable("id") String id){
         return ResponseEntity.ok(this.mediator.send(this.factory.createUserByIdQuery(id)));
+    }
+    @GetMapping
+    public ResponseEntity<List<UserNasaApiResponse>> getEventsSearch(@RequestParam(value = "ano", required = true)String year){
+
+        return ResponseEntity.ok(this.mediator.send(this.factory.createSearchYearQuery(year)));
     }
 }
