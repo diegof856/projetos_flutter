@@ -28,7 +28,7 @@ return GestureDetector(
       SizedBox(width: 16),
       _dayNumeric(DateTime.parse(event.date)),
         SizedBox(width: 16),
-       Expanded(child: _infoBasics(event))
+       _infoBasics(event)
     ],
   ),
 );
@@ -64,7 +64,7 @@ Widget _infoRow(String hour, String closed){
       Text(hour,
        style: styleText()
       ),
-     SizedBox(width: 28),
+     SizedBox(width: 12),
       Text("Closed:"+closed,
       style: styleText(), 
       )

@@ -65,6 +65,7 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Widget _calendar(DateTime firstEventDate) {
+    
     return TableCalendar(
       firstDay: DateTime(firstEventDate.year - 1),
       lastDay: DateTime(firstEventDate.year + 1),
